@@ -53,7 +53,7 @@ auth.define_tables(username=False, signature=False)
 ## configure email
 mail = auth.settings.mailer
 mail.settings.server = 'logging' if request.is_local else 'smtp.gmail.com:587'
-mail.settings.sender = 'you@gmail.com'
+mail.settings.sender = 'harshil.goel@gmail.com'
 mail.settings.login = 'username:password'
 
 ## configure auth policy
@@ -85,3 +85,5 @@ use_janrain(auth, filename='private/janrain.key')
 
 ## after defining tables, uncomment below to enable auditing
 # auth.enable_record_versioning(db)
+
+
