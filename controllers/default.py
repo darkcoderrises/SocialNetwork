@@ -54,7 +54,25 @@ def home():
         elif id2 == logid:
             frlist.append(id1)
 
-    return dict(data="Welcome %(first_name)s" % auth.user, name=k , flist=flist , frlist=frlist)
+    import os
+    form = SQLFORM.factory(Field('description','string'),
+            Field('image', 'upload', requires=IS_IMAGE(),uploadfolder=os.path.join(request.folder,'uploads') ) 
+            )
+    if form.process().accepted:
+        stream = open(request.folder+'uploads/'+form.vars.image, 'rb')
+        db.post.insert(person_id=logid,description=form.vars.description,image=stream)
+        response.flash = 'form accepted'
+    elif form.errors:
+        print "you asshole"
+
+    post=[]
+    for row in db().select(db.post.ALL):
+        pid=row.person_id
+        des=row.description
+        img=row.image
+        post.append((pid,des,img))
+
+    return dict(data="Welcome %(first_name)s" % auth.user, name=k , flist=flist , frlist=frlist,form = form, post=post)
 
 
 

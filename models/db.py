@@ -86,7 +86,18 @@ use_janrain(auth, filename='private/janrain.key')
 ## after defining tables, uncomment below to enable auditing
 # auth.enable_record_versioning(db)
 
-db.define_table('friend',Field('friend_id1','integer'),Field('friend_id2','integer') )
-db.define_table('freq',Field('friend_id1','integer'),Field('friend_id2','integer') )
+db.define_table('friend',
+        Field('friend_id1','reference auth_user', requires=IS_IN_DB(db,db.auth_user,'%(id)s')),
+        Field('friend_id2','reference auth_user', requires=IS_IN_DB(db,db.auth_user,'%(id)s')))
+
+db.define_table('freq',
+        Field('friend_id1','reference auth_user', requires=IS_IN_DB(db,db.auth_user,'%(id)s')),
+        Field('friend_id2','reference auth_user', requires=IS_IN_DB(db,db.auth_user,'%(id)s'))) 
     
+db.define_table('post',
+        Field('person_id','reference auth_user', requires=IS_IN_DB(db,db.auth_user,'%(id)s')),
+        Field('description','string'),
+        Field('image', 'upload', ))
+
+
     

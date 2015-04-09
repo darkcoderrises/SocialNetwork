@@ -69,3 +69,18 @@ CREATE TABLE freq(
     friend_id2 INTEGER
 );
 success!
+success!
+success!
+success!
+timestamp: 2015-04-09T21:30:57.122604
+CREATE TABLE post(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    image CHAR(512)
+);
+success!
+timestamp: 2015-04-09T21:31:31.524471
+ALTER TABLE post ADD person_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE;
+success!
+timestamp: 2015-04-09T21:43:21.703114
+ALTER TABLE post ADD description CHAR(512);
+success!

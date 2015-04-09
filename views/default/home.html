@@ -5,6 +5,20 @@
 <br>
 
 {{=name}}
+<br /><br />
+<div class='upload' style='border:1px solid black;'>
+    Whats in your mind
+{{=form}}
+</div>
+<br />
+{{for i in post:}}
+<div style='background-color:red;border:2px solid black; margin:2px;'>
+{{=i[0]}}<br>
+{{=i[1]}}<br>
+<img  src="{{=URL( 'download', args=i[2])}}" height="100px" width="100px" />
+</div>
+{{pass}}
+
 
 
 {{block right_sidebar}}
