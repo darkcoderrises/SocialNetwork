@@ -17,30 +17,47 @@ def index():
     if you need a simple wiki simply replace the two lines below with:
     return auth.wiki()
     """
+    auth.settings.login_next=URL('home')
     return dict(form=auth())
+
+
+
 
 @auth.requires_login()
 def home():
+ 
+    logname = auth.user.first_name
+    logid = int(auth.user.id)   
     k=-1
-    if len(request.args) == 1:
+    if len(request.args)==0 or len(request.args)>1:
+        redirect(URL('home',args=(logid)))
+
+    elif len(request.args) == 1:
         name = request.args[0]
         for row in db().select(db.auth_user.ALL):
             if int(row.id) == int(name):
                 k = row.first_name
-    logname = auth.user.first_name
-    logid = int(auth.user.id)
-    if k!= -1 and logname != k:
-        req=k
-    else:
-        req=-1
-      
+
     flist=[]
+    frlist=[]
+
     for row in db().select(db.freq.ALL):
         if int(row.friend_id1) == logid:
-            #print int(row.friend_id2)
             flist.append(int(row.friend_id2))
 
-    return dict(data="Welcome %(first_name)s" % auth.user, req=req , flist=flist)
+    for row in db().select(db.friend.ALL):
+        id1 = int(row.friend_id1)
+        id2 = int(row.friend_id2)
+
+        if id1 == logid:
+            frlist.append(id2)
+        elif id2 == logid:
+            frlist.append(id1)
+
+    return dict(data="Welcome %(first_name)s" % auth.user, name=k , flist=flist , frlist=frlist)
+
+
+
 
 def user():
     """

@@ -1,11 +1,24 @@
+{{left_sidebar_enabled=True}}
+{{right_sidebar_enabled=True}}
+{{response.subtitle=data}}
 {{extend 'layout.html'}}
-{{=data}}
 <br>
-{{if req!=-1:}}
-{{pass}}
-<div style="border:1px solid black; display:block; float:right;">
+
+{{=name}}
+
+
+{{block right_sidebar}}
 Friends Requests:<br>
 {{for i in flist:}}
-{{=i}}<br>
+<a href="{{=i}}">{{=i}}</a><br>
 {{pass}}
-</div>
+{{end}}
+
+
+{{block left_sidebar}}
+Friends:
+<br>
+{{for i in frlist:}}
+<a href="{{=i}}">{{=i}}</a><br>
+{{pass}}
+{{end}}
