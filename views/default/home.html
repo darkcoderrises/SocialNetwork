@@ -1,2 +1,11 @@
 {{extend 'layout.html'}}
-
+{{=data}}
+<br>
+{{if req!=-1:}}
+{{pass}}
+<div style="border:1px solid black; display:block; float:right;">
+Friends Requests:<br>
+{{for i in flist:}}
+{{=i}}<br>
+{{pass}}
+</div>

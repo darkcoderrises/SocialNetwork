@@ -21,7 +21,26 @@ def index():
 
 @auth.requires_login()
 def home():
-    return dict()
+    k=-1
+    if len(request.args) == 1:
+        name = request.args[0]
+        for row in db().select(db.auth_user.ALL):
+            if int(row.id) == int(name):
+                k = row.first_name
+    logname = auth.user.first_name
+    logid = int(auth.user.id)
+    if k!= -1 and logname != k:
+        req=k
+    else:
+        req=-1
+      
+    flist=[]
+    for row in db().select(db.freq.ALL):
+        if int(row.friend_id1) == logid:
+            #print int(row.friend_id2)
+            flist.append(int(row.friend_id2))
+
+    return dict(data="Welcome %(first_name)s" % auth.user, req=req , flist=flist)
 
 def user():
     """

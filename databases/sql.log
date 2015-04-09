@@ -53,3 +53,19 @@ CREATE TABLE auth_cas(
     renew CHAR(1)
 );
 success!
+timestamp: 2015-04-09T12:29:44.510438
+CREATE TABLE friend(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    friend_id1 INTEGER
+);
+success!
+timestamp: 2015-04-09T12:50:45.525084
+ALTER TABLE friend ADD friend_id2 INTEGER;
+success!
+timestamp: 2015-04-09T13:46:35.078797
+CREATE TABLE freq(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    friend_id1 INTEGER,
+    friend_id2 INTEGER
+);
+success!
