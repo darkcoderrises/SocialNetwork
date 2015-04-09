@@ -29,14 +29,20 @@ def home():
     logname = auth.user.first_name
     logid = int(auth.user.id)   
     k=-1
+    l=logid
     if len(request.args)==0 or len(request.args)>1:
         redirect(URL('home',args=(logid)))
-
+    
     elif len(request.args) == 1:
         name = request.args[0]
         for row in db().select(db.auth_user.ALL):
             if int(row.id) == int(name):
+                l= row.id
                 k = row.first_name
+
+    m=-1
+    if(k==logname):
+        m=1  
 
     flist=[]
     frlist=[]
@@ -72,7 +78,8 @@ def home():
         img=row.image
         post.append((pid,des,img))
 
-    return dict(data="Welcome %(first_name)s" % auth.user, name=k , flist=flist , frlist=frlist,form = form, post=post)
+    return dict(l=l,m=m,data="Welcome %(first_name)s" % auth.user, name=k , flist=flist , frlist=frlist,form = form, post=post)
+
 
 
 
