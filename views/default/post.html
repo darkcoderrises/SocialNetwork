@@ -10,7 +10,8 @@
     <table>
         <tr>
             <td width="100px">
-                <b>                {{=post[0]}}
+                <b>                
+                    {{=name}}
                 </b>
                 <br>
             </td>
@@ -18,10 +19,37 @@
                 <b>{{=post[1]}}</b><br>
             </td>
         </tr>
+       
+       
+        <tr>
+
+            <td>
+                {{=len(like)}} people like this
+            </td>
+
+            <td>
+                {{flag=1}}
+                {{for i in like:}}
+                    {{ if i.id == auth.user.id :}}
+                        {{ flag=0}}
+                    {{pass}}
+                {{pass}}
+                {{ if flag:}}
+                    {{=A('Like',callback=URL('likeimage',args=post[3]))}}
+                {{pass}}
+                {{ if not flag:}}
+
+                    {{=A('Unlike',callback=URL('unlikeimage',args=post[3]))}}
+                {{pass}}
+            </td>
+
+        </tr>
+
+
         <tr>
             <td style="border:1px solid black;" colspan="2"> Comments</td>
         </tr>
-        
+
 
         {{ for i in data:}}
 

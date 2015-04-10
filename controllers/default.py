@@ -127,7 +127,7 @@ def post():
     pid=row.person_id
     des=row.description
     img=row.image
-    post=(pid,des,img)
+    post=(pid,des,img,postid)
 
     data=[]
     
@@ -140,7 +140,16 @@ def post():
         print "Yay"
         db.postcomment.insert(post_id=postid,person_id=auth.user.id,comments=commentform.vars.Comment)
 
-    return dict(error=0,post=post,data=data,form=commentform)
+
+    like = []
+
+    for likes in db(db.postlikes.post_id == postid).select():
+        persondetail = db(db.auth_user.id == likes.person_id).select()[0]
+        like.append(persondetail)
+
+    name = db(db.auth_user.id == pid).select()[0].first_name    
+
+    return dict(error=0,post=post,data=data,name=name,form=commentform,like=like)
 
 @auth.requires_login()
 def search():
@@ -149,6 +158,17 @@ def search():
     ids = request.args[1].split('_')
     str_lists = filter(None, ids) 
     return dict(people=str_list,ids=str_lists)
+
+@auth.requires_login()
+def likeimage():
+    db.postlikes.insert(post_id=request.args[0], person_id=auth.user.id)
+
+
+@auth.requires_login()
+def unlikeimage():
+    db(db.postlikes.post_id == request.args[0] and db.postlikes.person_id == auth.user.id).delete()
+
+   
 
 def user():
     """
