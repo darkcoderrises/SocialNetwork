@@ -4,6 +4,23 @@
 {{extend 'layout.html'}}
 <br>
 
+{{block right_sidebar}}
+Friends Requests:<br>
+{{for i in flist:}}
+<a href="{{=i}}">{{=people[i]}}</a><br>
+{{pass}}
+{{end}}
+
+{{block left_sidebar}}
+Friends:
+<br>
+{{for i in frlist:}}
+<a href="{{=i}}">{{=people[i]}}</a><br>
+{{pass}}
+{{end}}
+
+
+<br>
 {{=name}}
 {{if m==1:}}
 <br /><br />
@@ -12,40 +29,64 @@
     {{=form}}
 </div>
 {{pass}}
+
+{{if m!=1 and flass==-1:}}
+<br /><br />
+<div class='upload' style='border:1px solid black;'>
+    {{=A('Send Friend Request',callback=URL('sendreq',args=(l,logid) ))}}
+
+</div>
+{{pass}}
+
+{{if m!=1 and flass==0:}}
+<br /><br />
+<div style='border:1px solid black;'>
+    {{=A('Accept Friend Request',callback=URL('acceptreq',args=(l,logid) ))}}
+</div>
+{{pass}}
+
+{{if m!=1 and flass==1:}}
+<div style='border:1px solid black;'>
+    {{=A('Delete Friend',callback=URL('delfriend',args=(l,logid) ))}}
+</div>
+{{pass}}
+
+
 <br />
 {{for i in post:}}
-    {{if m==1:}}
-    <div style='background-color:red;border:2px solid black; margin:2px;'>
-        {{=i[0]}}<br>
-        {{=i[1]}}<br>
-        <img  src="{{=URL( 'download', args=i[2])}}" height="100px" width="100px" />
-    </div>
-    {{pass}}
-    {{if m==-1:}}
-        {{if l==i[0]:}}
-            <div style='background-color:red;border:2px solid black; margin:2px;'>      
-                {{=i[0]}}<br>
+{{if m==1:}}
+<div style='border:2px solid black; margin:2px; margin-bottom:10px;'>
+    <table>
+        <tr>
+            <td width="100px">
+                {{=people[i[0]]}}<br>
+            </td>
+            <td>
                 {{=i[1]}}<br>
                 <img  src="{{=URL( 'download', args=i[2])}}" height="100px" width="100px" />
-            </div>
-        {{pass}}
-    {{pass}}
+            </td>
+        </tr>
+    </table>
+</div>
+{{pass}}
+{{if m==-1:}}
+{{if l==i[0]:}}
+<div style='border:2px solid black; margin:2px;margin-bottom:10px;'>
+    <table>
+        <tr>
+            <td>
+                {{=people[i[0]]}}<br>
+            </td>
+            <td>
+                {{=i[1]}}<br>
+                <img  src="{{=URL( 'download', args=i[2])}}" height="100px" width="100px" />
+            </td>
+        </tr>
+    </table>
+</div>
+
+{{pass}}
+{{pass}}
 {{pass}}
 
 
-
-{{block right_sidebar}}
-Friends Requests:<br>
-{{for i in flist:}}
-<a href="{{=i}}">{{=i}}</a><br>
-{{pass}}
-{{end}}
-
-
-{{block left_sidebar}}
-Friends:
-<br>
-{{for i in frlist:}}
-<a href="{{=i}}">{{=i}}</a><br>
-{{pass}}
-{{end}}

@@ -21,12 +21,34 @@ def index():
     return dict(form=auth())
 
 
+@auth.requires_login()
+def acceptreq():
+    id2 = request.args[0]
+    id1 = request.args[1]
+    db(db.freq.friend_id2==id2).delete()
+    db.friend.insert(friend_id1=id1,friend_id2=id2)
 
+@auth.requires_login()
+def sendreq():
+    id1 = request.args[0]
+    id2 = request.args[1]
+    db(db.freq.friend_id1==id1 and db.freq.friend_id2==id2).delete()
+    db.freq.insert(friend_id1=id1,friend_id2=id2)
+
+@auth.requires_login()
+def delfriend():
+    id1 = request.args[0]
+    id2 = request.args[1]
+    db(db.friend.friend_id1==id1 and db.friend.friend_id2==id2).delete()
+    db(db.friend.friend_id1==id2 and db.friend.friend_id2==id1).delete()
+    redirect(URL('home',args=(int(auth.user.id))))
 
 @auth.requires_login()
 def home():
  
+    flass=-1
     logname = auth.user.first_name
+    people={}
     logid = int(auth.user.id)   
     k=-1
     l=logid
@@ -36,6 +58,7 @@ def home():
     elif len(request.args) == 1:
         name = request.args[0]
         for row in db().select(db.auth_user.ALL):
+            people[int(row.id)]=row.first_name+" "+row.last_name
             if int(row.id) == int(name):
                 l= row.id
                 k = row.first_name
@@ -49,6 +72,8 @@ def home():
 
     for row in db().select(db.freq.ALL):
         if int(row.friend_id1) == logid:
+            if l == int(row.friend_id2):
+                flass=0
             flist.append(int(row.friend_id2))
 
     for row in db().select(db.friend.ALL):
@@ -56,8 +81,12 @@ def home():
         id2 = int(row.friend_id2)
 
         if id1 == logid:
+            if id2 == l:
+                flass=1
             frlist.append(id2)
         elif id2 == logid:
+            if id1 == l:
+                flass=1
             frlist.append(id1)
 
     import os
@@ -67,9 +96,6 @@ def home():
     if form.process().accepted:
         stream = open(request.folder+'uploads/'+form.vars.image, 'rb')
         db.post.insert(person_id=logid,description=form.vars.description,image=stream)
-        response.flash = 'form accepted'
-    elif form.errors:
-        print "you asshole"
 
     post=[]
     for row in db().select(db.post.ALL):
@@ -78,7 +104,7 @@ def home():
         img=row.image
         post.append((pid,des,img))
 
-    return dict(l=l,m=m,data="Welcome %(first_name)s" % auth.user, name=k , flist=flist , frlist=frlist,form = form, post=post)
+    return dict(logid=logid,people=people,flass=flass,l=l,m=m,data="Welcome %(first_name)s" % auth.user, name=k , flist=flist , frlist=frlist,form = form, post=post)
 
 
 
