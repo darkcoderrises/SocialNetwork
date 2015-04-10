@@ -1,0 +1,47 @@
+{{extend 'layout.html'}}
+{{if error:}}
+<h1>Error</h1>
+{{pass}}
+{{if error==0:}}
+
+<div style='border:2px solid black; margin:2px; margin-bottom:10px;'>
+    <center>    <img  src="{{=URL( 'download', args=post[2])}}" /></center>
+
+    <table>
+        <tr>
+            <td width="100px">
+                <b>                {{=post[0]}}
+                </b>
+                <br>
+            </td>
+            <td>
+                <b>{{=post[1]}}</b><br>
+            </td>
+        </tr>
+        <tr>
+            <td style="border:1px solid black;" colspan="2"> Comments</td>
+        </tr>
+        
+
+        {{ for i in data:}}
+
+        <tr>
+
+            <td>
+                {{=i[0].first_name+" "+i[0].last_name}}
+            </td>
+            <td>
+                {{=i[1]}}
+            </td>
+
+        </tr>
+
+        {{pass}}
+        {{=form}}
+    </table>
+</div>
+
+
+
+
+{{pass}}

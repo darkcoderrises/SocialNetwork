@@ -65,7 +65,7 @@ Friends:
             </td>
             <td>
                 {{=i[1]}}<br>
-                <img  src="{{=URL( 'download', args=i[2])}}" height="100px" width="100px" />
+                {{=A(IMG(_height="100px", _width="100px",_src=URL('download',args=i[2]) ) , _href = "../post/"+ str(i[3])  ) }}
             </td>
         </tr>
     </table>
@@ -81,7 +81,8 @@ Friends:
             </td>
             <td>
                 {{=i[1]}}<br>
-                <img  src="{{=URL( 'download', args=i[2])}}" height="100px" width="100px" />
+
+                {{=A(IMG(_height="100px", _width="100px",_src=URL('download',args=i[2]) ) , _href = "../post/"+ str(i[3])  ) }}
             </td>
         </tr>
     </table>

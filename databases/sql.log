@@ -84,3 +84,18 @@ success!
 timestamp: 2015-04-09T21:43:21.703114
 ALTER TABLE post ADD description CHAR(512);
 success!
+timestamp: 2015-04-10T18:52:16.513655
+CREATE TABLE postlikes(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    post_id INTEGER REFERENCES post (id) ON DELETE CASCADE,
+    person_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE
+);
+success!
+timestamp: 2015-04-10T18:52:49.875366
+CREATE TABLE postcomment(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    post_id INTEGER REFERENCES post (id) ON DELETE CASCADE,
+    person_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    comments CHAR(512)
+);
+success!

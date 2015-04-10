@@ -99,10 +99,11 @@ def home():
 
     post=[]
     for row in db().select(db.post.ALL, orderby=~db.post.id):
+        postid = row.id
         pid=row.person_id
         des=row.description
         img=row.image
-        post.append((pid,des,img))
+        post.append((pid,des,img,postid))
 
     search = SQLFORM.factory(Field('Search','string'))
     if search.process(formname='search').accepted:
@@ -116,6 +117,30 @@ def home():
 
     return dict(search=search,logid=logid,people=people,flass=flass,l=l,m=m,data="Welcome %(first_name)s" % auth.user, name=k , flist=flist , frlist=frlist,form = form, post=post)
 
+@auth.requires_login()
+def post():
+    rows=db(db.post.id==request.args[0]).select()
+    if len(rows)!=1:
+        return dict(error=1)
+    row=rows[0]
+    postid = row.id
+    pid=row.person_id
+    des=row.description
+    img=row.image
+    post=(pid,des,img)
+
+    data=[]
+    
+    for comments in db(db.postcomment.post_id == postid).select():
+        persondetail = db(db.auth_user.id == comments.person_id).select()[0]
+        data.append((persondetail,comments.comments))
+
+    commentform = SQLFORM.factory(Field('Comment','string'))
+    if commentform.process(formname='commentform').accepted:
+        print "Yay"
+        db.postcomment.insert(post_id=postid,person_id=auth.user.id,comments=commentform.vars.Comment)
+
+    return dict(error=0,post=post,data=data,form=commentform)
 
 @auth.requires_login()
 def search():

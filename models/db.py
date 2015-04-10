@@ -99,5 +99,16 @@ db.define_table('post',
         Field('description','string'),
         Field('image', 'upload', ))
 
+db.define_table('postlikes',
+        Field('post_id','reference post',requires=IS_IN_DB(db,db.post,'%(id)s')),
+        Field('person_id','reference auth_user', requires=IS_IN_DB(db,db.auth_user,'%(id)s'))
+        )
+
+db.define_table('postcomment',
+        Field('post_id','reference post',requires=IS_IN_DB(db,db.post,'%(id)s')),
+        Field('person_id','reference auth_user', requires=IS_IN_DB(db,db.auth_user,'%(id)s')),
+        Field('comments','string')
+        )
+
 
     
