@@ -93,22 +93,37 @@ def home():
     form = SQLFORM.factory(Field('description','string'),
             Field('image', 'upload', requires=IS_IMAGE(),uploadfolder=os.path.join(request.folder,'uploads') ) 
             )
-    if form.process().accepted:
+    if form.process(formname='form').accepted:
         stream = open(request.folder+'uploads/'+form.vars.image, 'rb')
         db.post.insert(person_id=logid,description=form.vars.description,image=stream)
 
     post=[]
-    for row in db().select(db.post.ALL):
+    for row in db().select(db.post.ALL, orderby=~db.post.id):
         pid=row.person_id
         des=row.description
         img=row.image
         post.append((pid,des,img))
 
-    return dict(logid=logid,people=people,flass=flass,l=l,m=m,data="Welcome %(first_name)s" % auth.user, name=k , flist=flist , frlist=frlist,form = form, post=post)
+    search = SQLFORM.factory(Field('Search','string'))
+    if search.process(formname='search').accepted:
+        name = search.vars.Search
+        resultn=[]
+        resulti=[]
+        for row in db(db.auth_user.first_name.contains(name,case_sensitive=False)).select():
+            resultn.append(row.first_name)
+            resulti.append(row.id)
+        redirect(URL('search',args=(resultn,resulti)))
+
+    return dict(search=search,logid=logid,people=people,flass=flass,l=l,m=m,data="Welcome %(first_name)s" % auth.user, name=k , flist=flist , frlist=frlist,form = form, post=post)
 
 
-
-
+@auth.requires_login()
+def search():
+    people= request.args[0].split('_')
+    str_list = filter(None, people) 
+    ids = request.args[1].split('_')
+    str_lists = filter(None, ids) 
+    return dict(people=str_list,ids=str_lists)
 
 def user():
     """

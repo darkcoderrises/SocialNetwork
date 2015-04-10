@@ -1,0 +1,5 @@
+{{extend 'layout.html'}}
+{{for i in xrange(len(people)):}}
+{{=A(people[i],_href=URL('home',args=ids[i].rstrip('L')))}}
+<br>
+{{pass}}
