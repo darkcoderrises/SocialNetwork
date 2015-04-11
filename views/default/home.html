@@ -75,7 +75,7 @@ Friends:
         <td width="100px">
             {{row=db(db.profilepic.person_id==i[0]).select()}}
             {{ if len(row) == 0:}}
-            {{ =IMG(_src=URL("static/images","facebook-default-no-profile-pic.jpg") ) }}
+            {{ =IMG(_height='50px',_width='50px',_src=URL("static/images","facebook-default-no-profile-pic.jpg") ) }}
             {{pass}}
             {{ if len(row) ==1:}}
             {{=IMG(_height="100px", _width="100px",_src=URL('download',args=row[0].image  ) )   }}
