@@ -5,8 +5,24 @@
 {{if error==0:}}
 
 <div style='border:2px solid black; margin:2px; margin-bottom:10px;'>
-    <center>    <img  src="{{=URL( 'download', args=post[2])}}" /></center>
+                        {{if post[2]!=None:}}
+                        {{=IMG(_src=URL('download',args=post[2]) )   }}
+                        {{pass}}
+                        {{if post[4]!=None:}}
+                        {{ if post[4][-3:]=='mp3':  }}
+                        <audio controls>
+                            <source src="{{=URL('download', args=post[4])}}" />
 
+                        </audio>
+                        {{pass}}
+                        {{if post[4][-3:]=='mp4':}}
+                        <video controls>
+                            <source src="{{=URL('download', args=post[4])}}" />
+                        </video>
+                        {{pass}}
+
+                        {{pass}}
+ 
     <table>
         <tr>
             <td width="100px">

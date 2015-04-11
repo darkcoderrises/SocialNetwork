@@ -27,13 +27,18 @@ def acceptreq():
     id1 = request.args[1]
     db(db.freq.friend_id2==id2).delete()
     db.friend.insert(friend_id1=id1,friend_id2=id2)
+    redirect( request.env.http_web2py_component_location,client_side=True)
 
 @auth.requires_login()
 def sendreq():
     id1 = request.args[0]
     id2 = request.args[1]
-    db(db.freq.friend_id1==id1 and db.freq.friend_id2==id2).delete()
-    db.freq.insert(friend_id1=id1,friend_id2=id2)
+
+    flag=db( ( db.freq.friend_id1==id1 and db.freq.friend_id2==id2) or ( db.freq.friend_id1==id2 and db.freq.friend_id2==id1)  ).count()
+    if flag==0:
+        db(db.freq.friend_id1==id1 and db.freq.friend_id2==id2).delete()
+        db.freq.insert(friend_id1=id1,friend_id2=id2)
+    redirect( request.env.http_web2py_component_location,client_side=True)
 
 @auth.requires_login()
 def delfriend():
@@ -41,7 +46,7 @@ def delfriend():
     id2 = request.args[1]
     db(db.friend.friend_id1==id1 and db.friend.friend_id2==id2).delete()
     db(db.friend.friend_id1==id2 and db.friend.friend_id2==id1).delete()
-    redirect(URL('home',args=(int(auth.user.id))))
+    redirect( request.env.http_web2py_component_location,client_side=True)
 
 @auth.requires_login()
 def home():
@@ -91,11 +96,24 @@ def home():
 
     import os
     form = SQLFORM.factory(Field('description','string'),
-            Field('image', 'upload', requires=IS_IMAGE(),uploadfolder=os.path.join(request.folder,'uploads') ) 
+            Field('image', 'upload', requires=IS_EMPTY_OR(IS_IMAGE()),uploadfolder=os.path.join(request.folder,'uploads') ) ,
+
+            Field('music', 'upload', requires=IS_EMPTY_OR(IS_UPLOAD_FILENAME(extension=('mp.'))),uploadfolder=os.path.join(request.folder,'uploads') ) 
             )
     if form.process(formname='form').accepted:
-        stream = open(request.folder+'uploads/'+form.vars.image, 'rb')
-        db.post.insert(person_id=logid,description=form.vars.description,image=stream)
+        if form.vars.music!='':
+            stream1 = open(request.folder+'uploads/'+form.vars.music, 'rb') 
+            if form.vars.image!='':
+                stream = open(request.folder+'uploads/'+form.vars.image, 'rb')
+                db.post.insert(person_id=logid,description=form.vars.description,image=stream,music=stream1)
+            else:
+                db.post.insert(person_id=logid,description=form.vars.description,music=stream1)
+        else:
+            if form.vars.image!='':
+                stream = open(request.folder+'uploads/'+form.vars.image, 'rb')
+                db.post.insert(person_id=logid,description=form.vars.description,image=stream)
+            else:
+                db.post.insert(person_id=logid,description=form.vars.description)
 
     post=[]
     for row in db().select(db.post.ALL, orderby=~db.post.id):
@@ -103,7 +121,12 @@ def home():
         pid=row.person_id
         des=row.description
         img=row.image
-        post.append((pid,des,img,postid))
+        mus=row.music
+        if mus == '':
+            mus=-1
+        if img == '':
+            img=-1
+        post.append((pid,des,img,postid,mus))
 
     search = SQLFORM.factory(Field('Search','string'))
     if search.process(formname='search').accepted:
@@ -127,7 +150,12 @@ def post():
     pid=row.person_id
     des=row.description
     img=row.image
-    post=(pid,des,img,postid)
+    mus=row.music
+    if img=='':
+        img=-1
+    if mus=='':
+        mus=-1
+    post=(pid,des,img,postid,mus)
 
     data=[]
     
@@ -137,9 +165,8 @@ def post():
 
     commentform = SQLFORM.factory(Field('Comment','string'))
     if commentform.process(formname='commentform').accepted:
-        print "Yay"
         db.postcomment.insert(post_id=postid,person_id=auth.user.id,comments=commentform.vars.Comment)
-
+        redirect( request.env.http_web2py_component_location,client_side=True)
 
     like = []
 
@@ -162,12 +189,13 @@ def search():
 @auth.requires_login()
 def likeimage():
     db.postlikes.insert(post_id=request.args[0], person_id=auth.user.id)
+    redirect( request.env.http_web2py_component_location,client_side=True)
 
 
 @auth.requires_login()
 def unlikeimage():
     db(db.postlikes.post_id == request.args[0] and db.postlikes.person_id == auth.user.id).delete()
-
+    redirect( request.env.http_web2py_component_location,client_side=True)
    
 
 def user():

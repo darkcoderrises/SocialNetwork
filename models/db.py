@@ -97,7 +97,8 @@ db.define_table('freq',
 db.define_table('post',
         Field('person_id','reference auth_user', requires=IS_IN_DB(db,db.auth_user,'%(id)s')),
         Field('description','string'),
-        Field('image', 'upload', ))
+        Field('music', 'upload',requires=IS_EMPTY_OR(IS_UPLOAD_FILENAME(extension='mp.'))),
+        Field('image', 'upload',requires=IS_EMPTY_OR(IS_IMAGE())  ))
 
 db.define_table('postlikes',
         Field('post_id','reference post',requires=IS_IN_DB(db,db.post,'%(id)s')),
