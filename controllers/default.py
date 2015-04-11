@@ -95,7 +95,7 @@ def home():
             frlist.append(id1)
 
     import os
-    form = SQLFORM.factory(Field('description','string'),
+    form = SQLFORM.factory(Field('description','string',notnull=True),
             Field('image', 'upload', requires=IS_EMPTY_OR(IS_IMAGE()),uploadfolder=os.path.join(request.folder,'uploads') ) ,
 
             Field('music', 'upload', requires=IS_EMPTY_OR(IS_UPLOAD_FILENAME(extension=('mp.'))),uploadfolder=os.path.join(request.folder,'uploads') ) 

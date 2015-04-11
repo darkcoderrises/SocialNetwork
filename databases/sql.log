@@ -102,3 +102,4 @@ success!
 timestamp: 2015-04-11T01:48:40.746221
 ALTER TABLE post ADD music CHAR(512);
 success!
+success!
