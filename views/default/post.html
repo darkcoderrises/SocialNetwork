@@ -22,7 +22,10 @@
                         {{pass}}
 
                         {{pass}}
- 
+                        {{ if post[0] == auth.user.id:}} 
+                        {{=A('deletepost',callback=URL('deletepost',args=post[3]))  }}
+                        {{pass}}
+
     <table>
         <tr>
             <td width="100px">

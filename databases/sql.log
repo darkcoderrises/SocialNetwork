@@ -103,3 +103,10 @@ timestamp: 2015-04-11T01:48:40.746221
 ALTER TABLE post ADD music CHAR(512);
 success!
 success!
+timestamp: 2015-04-11T12:50:10.099249
+CREATE TABLE profilepic(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    person_id INTEGER REFERENCES auth_user (id) ON DELETE CASCADE,
+    image CHAR(512)
+);
+success!

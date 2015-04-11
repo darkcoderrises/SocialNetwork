@@ -126,7 +126,11 @@ def home():
             mus=-1
         if img == '':
             img=-1
-        post.append((pid,des,img,postid,mus))
+        if m==1:
+            if pid in frlist or pid == logid:
+                post.append((pid,des,img,postid,mus))
+        else:
+            post.append((pid,des,img,postid,mus))
 
     search = SQLFORM.factory(Field('Search','string'))
     if search.process(formname='search').accepted:
@@ -137,8 +141,17 @@ def home():
             resultn.append(row.first_name)
             resulti.append(row.id)
         redirect(URL('search',args=(resultn,resulti)))
+    
+    picform = SQLFORM.factory(
+            Field('ProfilePic', 'upload', requires=IS_IMAGE(),uploadfolder=os.path.join(request.folder,'uploads') ) 
+            )
+    if picform.process(formname='picform').accepted:
+        db(db.profilepic.person_id==logid).delete()
+        stream2 = open(request.folder+'uploads/'+picform.vars.ProfilePic, 'rb')
 
-    return dict(search=search,logid=logid,people=people,flass=flass,l=l,m=m,data="Welcome %(first_name)s" % auth.user, name=k , flist=flist , frlist=frlist,form = form, post=post)
+        db.profilepic.insert(person_id=logid, image=stream2)
+    
+    return dict(picform=picform,search=search,logid=logid,people=people,flass=flass,l=l,m=m,data=A(auth.user.first_name, _href="default/home" ), name=k , flist=flist , frlist=frlist,form = form, post=post)
 
 @auth.requires_login()
 def post():
@@ -177,6 +190,11 @@ def post():
     name = db(db.auth_user.id == pid).select()[0].first_name    
 
     return dict(error=0,post=post,data=data,name=name,form=commentform,like=like)
+
+@auth.requires_login()
+def deletepost():
+    m = db(db.post.id == request.args[0] )
+    redirect ( URL('../home'), client_side=True)
 
 @auth.requires_login()
 def search():

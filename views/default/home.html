@@ -12,6 +12,19 @@ Friends Requests:<br>
 {{end}}
 
 {{block left_sidebar}}
+
+{{row=db(db.profilepic.person_id== logid).select()}}
+            {{ if len(row) == 0:}}
+            {{ =IMG(_src=URL("static/images","facebook-default-no-profile-pic.jpg") ) }}
+            {{pass}}
+            {{ if len(row) ==1:}}
+            {{=IMG(_height="100px", _width="100px",_src=URL('download',args=row[0].image  ) )   }}
+
+            {{pass}}
+
+{{=picform}}
+
+
 Friends:
 <br>
 {{for i in frlist:}}
@@ -34,231 +47,11 @@ Friends:
 
 {{if m!=1 and flass==-1:}}
 <br /><br />
-<div class='upload' style='border:1px solid black;'>
+<div class='upload' style='border:1px solid red;'>
     {{=A('Send Friend Request',callback=URL('sendreq',args=(l,logid) ))}}
-
-    {{left_sidebar_enabled=True}}
-    {{left_sidebar_enabled=True}}
-    {{right_sidebar_enabled=True}}
-    {{response.subtitle=data}}
-    {{extend 'layout.html'}}
-    <br>
-
-    {{block right_sidebar}}
-    Friends Requests:<br>
-    {{for i in flist:}}
-    <a href="{{=i}}">{{=people[i]}}</a><br>
-    {{pass}}
-    {{end}}
-
-    {{block left_sidebar}}
-    Friends:
-    <br>
-    {{for i in frlist:}}
-    <a href="{{=i}}">{{=people[i]}}</a><br>
-    {{pass}}
-    {{end}}
-
-
-    {{=search}}
-
-    <br>
-    {{=name}}
-    {{if m==1:}}
-    <br /><br />
-    <div class='upload' style='border:1px solid black;'>
-        Whats in your mind
-        {{=form}}
-    </div>
-    {{pass}}
-
-    {{if m!=1 and flass==-1:}}
-    <br /><br />
-    <div class='upload' style='border:1px solid black;'>
-        {{=A('Send Friend Request',callback=URL('sendreq',args=(l,logid) ))}}
-
-    </div>
-    {{pass}}
-
-    {{if m!=1 and flass==0:}}
-    <br /><br />
-    <div style='border:1px solid black;'>
-        {{=A('Accept Friend Request',callback=URL('acceptreq',args=(l,logid) ))}}
-    </div>
-    {{pass}}
-
-    {{if m!=1 and flass==1:}}
-    <div style='border:1px solid black;'>
-        {{=A('Delete Friend',callback=URL('delfriend',args=(l,logid) ))}}
-    </div>
-    {{pass}}
-
-
-    <br />
-    {{for i in post:}}
-    {{if m==1:}}
-    <div style='border:2px solid black; margin:2px; margin-bottom:10px;'>
-        <table>
-            <tr>
-                <td width="100px">
-                    {{=people[i[0]]}}<br>
-                </td>
-                <td>
-                    <a href="{{="../post/"+str(i[3])}}">
-                        {{=i[1]}}<br>
-                        {{if i[2]!=None:}}
-                        {{=IMG(_height="100px", _width="100px",_src=URL('download',args=i[2]) )   }}
-                        {{pass}}
-                        {{if i[4]!=None:}}
-                        Music<br />
-                        {{pass}}
-                    </a>
-                </td>
-            </tr>
-        </table>
-    </div>
-    {{pass}}
-    {{if m==-1:}}
-    {{if l==i[0]:}}
-    <div style='border:2px solid black; margin:2px;margin-bottom:10px;'>
-        <table>
-            <tr>
-                <td>
-                    {{=people[i[0]]}}<br>
-                </td>
-
-                <td>
-                    <a href="{{="../post/"+str(i[3])}}">
-                        {{=i[1]}}<br>
-
-                        {{ if i[2] !=-1:}}
-                        {{=IMG(_height="100px", _width="100px",_src=URL('download',args=i[2]) ) }}
-                        {{pass}}
-                        {{if i[4]!=None:}}
-                        Music<br />
-                        {{pass}}
-                    </a>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    {{pass}}
-    {{pass}}
-    {{pass}}
-
-
-    {{right_sidebar_enabled=True}}
-    {{response.subtitle=data}}
-    {{extend 'layout.html'}}
-    <br>
-
-    {{block right_sidebar}}
-    Friends Requests:<br>
-    {{for i in flist:}}
-    <a href="{{=i}}">{{=people[i]}}</a><br>
-    {{pass}}
-    {{end}}
-
-    {{block left_sidebar}}
-    Friends:
-    <br>
-    {{for i in frlist:}}
-    <a href="{{=i}}">{{=people[i]}}</a><br>
-    {{pass}}
-    {{end}}
-
-
-    {{=search}}
-
-    <br>
-    {{=name}}
-    {{if m==1:}}
-    <br /><br />
-    <div class='upload' style='border:1px solid black;'>
-        Whats in your mind
-        {{=form}}
-    </div>
-    {{pass}}
-
-    {{if m!=1 and flass==-1:}}
-    <br /><br />
-    <div class='upload' style='border:1px solid black;'>
-        {{=A('Send Friend Request',callback=URL('sendreq',args=(l,logid) ))}}
-
-    </div>
-    {{pass}}
-
-    {{if m!=1 and flass==0:}}
-    <br /><br />
-    <div style='border:1px solid black;'>
-        {{=A('Accept Friend Request',callback=URL('acceptreq',args=(l,logid) ))}}
-    </div>
-    {{pass}}
-
-    {{if m!=1 and flass==1:}}
-    <div style='border:1px solid black;'>
-        {{=A('Delete Friend',callback=URL('delfriend',args=(l,logid) ))}}
-    </div>
-    {{pass}}
-
-
-    <br />
-    {{for i in post:}}
-    {{if m==1:}}
-    <div style='border:2px solid black; margin:2px; margin-bottom:10px;'>
-        <table>
-            <tr>
-                <td width="100px">
-                    {{=people[i[0]]}}<br>
-                </td>
-                <td>
-                    <a href="{{="../post/"+str(i[3])}}">
-                        {{=i[1]}}<br>
-                        {{if i[2]!=None:}}
-                        {{=IMG(_height="100px", _width="100px",_src=URL('download',args=i[2]) )   }}
-                        {{pass}}
-                        {{if i[4]!=None:}}
-                        Music<br />
-                        {{pass}}
-                    </a>
-                </td>
-            </tr>
-        </table>
-    </div>
-    {{pass}}
-    {{if m==-1:}}
-    {{if l==i[0]:}}
-    <div style='border:2px solid black; margin:2px;margin-bottom:10px;'>
-        <table>
-            <tr>
-                <td>
-                    {{=people[i[0]]}}<br>
-                </td>
-
-                <td>
-                    <a href="{{="../post/"+str(i[3])}}">
-                        {{=i[1]}}<br>
-
-                        {{ if i[2] !=-1:}}
-                        {{=IMG(_height="100px", _width="100px",_src=URL('download',args=i[2]) ) }}
-                        {{pass}}
-                        {{if i[4]!=None:}}
-                        Music<br />
-                        {{pass}}
-                    </a>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    {{pass}}
-    {{pass}}
-    {{pass}}
-
-
 </div>
 {{pass}}
+
 
 {{if m!=1 and flass==0:}}
 <br /><br />
@@ -275,81 +68,92 @@ Friends:
 
 
 <br />
-{{for i in post:}}
-{{if m==1:}}
-<div style='border:2px solid black; margin:2px; margin-bottom:10px;'>
-    <table>
-        <tr>
-            <td width="100px">
-                {{=people[i[0]]}}<br>
-            </td>
-            <td>
-                <a href="{{="../post/"+str(i[3])}}">
-                    {{=i[1]}}<br>
-                    {{if i[2]!=None:}}
-                    {{=IMG(_height="100px", _width="100px",_src=URL('download',args=i[2]) )   }}
-                    {{pass}}
-                    {{if i[4]!=None:}}
-                    {{ if i[4][-3:]=='mp3':  }}
-                        <audio controls>
-                            <source src="{{=URL('download', args=i[4])}}" />
+<table >
+    {{for i in post:}}
+    {{if m==1:}}
+    <tr style="border:2px solid black;">
+        <td width="100px">
+            {{row=db(db.profilepic.person_id==i[0]).select()}}
+            {{ if len(row) == 0:}}
+            {{ =IMG(_src=URL("static/images","facebook-default-no-profile-pic.jpg") ) }}
+            {{pass}}
+            {{ if len(row) ==1:}}
+            {{=IMG(_height="100px", _width="100px",_src=URL('download',args=row[0].image  ) )   }}
 
-                        </audio>
-                        {{pass}}
-                        {{if i[4][-3:]=='mp4':}}
-                        <video controls>
-                            <source src="{{=URL('download', args=i[4])}}" />
-                        </video>
-                        {{pass}}
+            {{pass}}
+        </td>
+        <td>
+            {{=A(people[i[0]], _href="/SocialNetwork/default/home/"+str(i[0]))}}
+            <a href="{{="../post/"+str(i[3])}}">
+                {{=i[1]}}<br>
+                {{if i[2]!=None:}}
+                {{=IMG(_height="100px", _width="100px",_src=URL('download',args=i[2]) )   }}
+                {{pass}}
+                {{if i[4]!=None:}}
+                {{ if i[4][-3:]=='mp3':  }}
+                <audio controls>
+                    <source src="{{=URL('download', args=i[4])}}" />
 
-
-                    {{pass}}
-                </a>
-            </td>
-        </tr>
-    </table>
-</div>
-{{pass}}
-{{if m==-1:}}
-{{if l==i[0]:}}
-<div style='border:2px solid black; margin:2px;margin-bottom:10px;'>
-    <table>
-        <tr>
-            <td>
-                {{=people[i[0]]}}<br>
-            </td>
-
-            <td>
-                <a href="{{="../post/"+str(i[3])}}">
-                    {{=i[1]}}
-
-                    {{ if i[2] !=-1:}}
-                    {{=IMG(_height="100px", _width="100px",_src=URL('download',args=i[2]) ) }}
-                    {{pass}}
-                    {{if i[4]!=None:}}
-                    
-                    {{ if post[4][-3:]=='mp3':  }}
-                        <audio controls>
-                            <source src="{{=URL('download', args=post[4])}}" />
-
-                        </audio>
-                        {{pass}}
-                        {{if post[4][-3:]=='mp4':}}
-                        <video controls>
-                            <source src="{{=URL('download', args=post[4])}}" />
-                        </video>
-                        {{pass}}
+                </audio>
+                {{pass}}
+                {{if i[4][-3:]=='mp4':}}
+                <video controls>
+                    <source src="{{=URL('download', args=i[4])}}" />
+                </video>
+                {{pass}}
 
 
+                {{pass}}
+            </a>
+        </td>
+    </tr>
+    {{pass}}
+    {{if m==-1:}}
+    {{if l==i[0]:}}
+    <tr>
+        <td>
+            {{row=db(db.profilepic.person_id==i[0]).select()}}
+            {{ if len(row) == 0:}}
+            {{ =IMG(_src=URL("static/images","facebook-default-no-profile-pic.jpg"), _height="50px", _width="50px" ) }}
+            {{pass}}
+            {{ if len(row) ==1:}}
+
+            {{=IMG(_height="50px", _width="50px",_src=URL('download',args=row[0].image  ) )   }}
+
+            {{pass}}
+        </td>
+
+        <td> 
+            {{=A(people[i[0]], _href="/SocialNetwork/default/home/"+str(i[0]))}}
+
+            <a href="{{="../post/"+str(i[3])}}">
+                {{=i[1]}}<br>
+
+                {{ if i[2] !=-1:}}
+                {{=IMG(_height="100px", _width="100px",_src=URL('download',args=i[2]) ) }}
+                {{pass}}
+                {{if i[4]!=None:}}
+
+                {{ if post[4][-3:]=='mp3':  }}
+                <audio controls>
+                    <source src="{{=URL('download', args=post[4])}}" />
+
+                </audio>
+                {{pass}}
+                {{if post[4][-3:]=='mp4':}}
+                <video controls>
+                    <source src="{{=URL('download', args=post[4])}}" />
+                </video>
+                {{pass}}
 
 
-                    {{pass}}
-                </a>
-            </td>
-        </tr>
-    </table>
-</div>
 
-{{pass}}
-{{pass}}
-{{pass}}
+
+                {{pass}}
+            </a>
+        </td>
+    </tr>
+    {{pass}}
+    {{pass}}
+    {{pass}}
+</table>

@@ -94,6 +94,10 @@ db.define_table('freq',
         Field('friend_id1','reference auth_user', requires=IS_IN_DB(db,db.auth_user,'%(id)s')),
         Field('friend_id2','reference auth_user', requires=IS_IN_DB(db,db.auth_user,'%(id)s'))) 
     
+db.define_table('profilepic',
+        Field('person_id','reference auth_user', requires=IS_IN_DB(db,db.auth_user,'%(id)s')),
+        Field('image','upload'))
+
 db.define_table('post',
         Field('person_id','reference auth_user', requires=IS_IN_DB(db,db.auth_user,'%(id)s')),
         Field('description','string',notnull=True),
