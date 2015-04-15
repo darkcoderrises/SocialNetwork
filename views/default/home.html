@@ -14,13 +14,13 @@ Friends Requests:<br>
 {{block left_sidebar}}
 
 {{row=db(db.profilepic.person_id== logid).select()}}
-            {{ if len(row) == 0:}}
-            {{ =IMG(_src=URL("static/images","facebook-default-no-profile-pic.jpg") ) }}
-            {{pass}}
-            {{ if len(row) ==1:}}
-            {{=IMG(_height="100px", _width="100px",_src=URL('download',args=row[0].image  ) )   }}
+{{ if len(row) == 0:}}
+{{ =IMG(_src=URL("static/images","facebook-default-no-profile-pic.jpg") ) }}
+{{pass}}
+{{ if len(row) ==1:}}
+{{=IMG(_height="100px", _width="100px",_src=URL('download',args=row[0].image  ) )   }}
 
-            {{pass}}
+{{pass}}
 
 {{=picform}}
 
@@ -31,7 +31,6 @@ Friends:
 <a href="{{=i}}">{{=people[i]}}</a><br>
 {{pass}}
 {{end}}
-
 
 {{=search}}
 
@@ -47,7 +46,8 @@ Friends:
 
 {{if m!=1 and flass==-1:}}
 <br /><br />
-<div class='upload' style='border:1px solid red;'>
+{{ temp = ;
+<div class='upload' style='border:1px solid black;'>
     {{=A('Send Friend Request',callback=URL('sendreq',args=(l,logid) ))}}
 </div>
 {{pass}}
@@ -68,92 +68,100 @@ Friends:
 
 
 <br />
-<table >
-    {{for i in post:}}
-    {{if m==1:}}
-    <tr style="border:2px solid black;">
-        <td width="100px">
-            {{row=db(db.profilepic.person_id==i[0]).select()}}
-            {{ if len(row) == 0:}}
-            {{ =IMG(_height='50px',_width='50px',_src=URL("static/images","facebook-default-no-profile-pic.jpg") ) }}
-            {{pass}}
-            {{ if len(row) ==1:}}
-            {{=IMG(_height="100px", _width="100px",_src=URL('download',args=row[0].image  ) )   }}
-
-            {{pass}}
-        </td>
-        <td>
-            {{=A(people[i[0]], _href="/SocialNetwork/default/home/"+str(i[0]))}}
-            <a href="{{="../post/"+str(i[3])}}">
-                {{=i[1]}}<br>
-                {{if i[2]!=None:}}
-                {{=IMG(_height="100px", _width="100px",_src=URL('download',args=i[2]) )   }}
+{{for i in post:}}
+{{if m==1 or ( m==-1 and l==i[0]  ) :}}
+<div class="postHome">
+    <table>
+        <tr>
+            <td >
+                {{row=db(db.profilepic.person_id==i[0]).select()}}
+                {{ if len(row) == 0:}}
+                {{ =IMG(_height='50px',_width='50px',_src=URL("static/images","facebook-default-no-profile-pic.jpg") ) }}
                 {{pass}}
-                {{if i[4]!=None:}}
-                {{ if i[4][-3:]=='mp3':  }}
-                <audio controls>
-                    <source src="{{=URL('download', args=i[4])}}" />
-
-                </audio>
-                {{pass}}
-                {{if i[4][-3:]=='mp4':}}
-                <video controls>
-                    <source src="{{=URL('download', args=i[4])}}" />
-                </video>
-                {{pass}}
-
+                {{ if len(row) ==1:}}
+                {{=IMG(_height="50px", _width="50px",_src=URL('download',args=row[0].image  ) )   }}
 
                 {{pass}}
-            </a>
-        </td>
-    </tr>
+            </td>
+            <td>
+                {{=A(people[i[0]], _href="/SocialNetwork/default/home/"+str(i[0]))}}
+            </td>
+        </tr>
+        <tr>
+            <td colspan='2'>
+                <br />
+                <a href="{{="../post/"+str(i[3])}}">
+                    {{=i[1]}}<br>
+                    {{if i[2]!=None:}}
+                    {{=IMG(_height="100px", _width="100px",_src=URL('download',args=i[2]) )   }}
+                    {{pass}}
+                    {{if i[4]!=None:}}
+                    {{ if i[4][-3:]=='mp3':  }}
+                    <audio controls>
+                        <source src="{{=URL('download', args=i[4])}}" />
+
+                    </audio>
+                    {{pass}}
+                    {{if i[4][-3:]=='mp4':}}
+                    <video controls>
+                        <source src="{{=URL('download', args=i[4])}}" />
+                    </video>
+                    {{pass}}
+
+
+                    {{pass}}
+                </a>
+            </td>
+        </tr>
+    </table>
+    {{ like = []}}
+    {{ for likes in db(db.postlikes.post_id == i[3]).select():}}
+    {{ like.append(db(db.auth_user.id==likes.person_id).select()[0])}}
     {{pass}}
-    {{if m==-1:}}
-    {{if l==i[0]:}}
-    <tr style="border:2px solid black;">
-        <td>
-            {{row=db(db.profilepic.person_id==i[0]).select()}}
-            {{ if len(row) == 0:}}
-            {{ =IMG(_src=URL("static/images","facebook-default-no-profile-pic.jpg"), _height="50px", _width="50px" ) }}
-            {{pass}}
-            {{ if len(row) ==1:}}
 
-            {{=IMG(_height="50px", _width="50px",_src=URL('download',args=row[0].image  ) )   }}
-
-            {{pass}}
-        </td>
-
-        <td> 
-            {{=A(people[i[0]], _href="/SocialNetwork/default/home/"+str(i[0]))}}
-
-            <a href="{{="../post/"+str(i[3])}}">
-                {{=i[1]}}<br>
-
-                {{ if i[2] !=-1:}}
-                {{=IMG(_height="100px", _width="100px",_src=URL('download',args=i[2]) ) }}
-                {{pass}}
-                {{if i[4]!=None:}}
-
-                {{ if post[4][-3:]=='mp3':  }}
-                <audio controls>
-                    <source src="{{=URL('download', args=post[4])}}" />
-
-                </audio>
-                {{pass}}
-                {{if post[4][-3:]=='mp4':}}
-                <video controls>
-                    <source src="{{=URL('download', args=post[4])}}" />
-                </video>
-                {{pass}}
-
-
-
-
-                {{pass}}
-            </a>
-        </td>
-    </tr>
+    {{flag=1}}
+    {{for postLikes in like:}}
+    {{ if postLikes.id == auth.user.id :}}
+    {{ flag=0}}
     {{pass}}
     {{pass}}
+    {{ if flag:}}
+    {{=A('Like',callback=URL('likeimage',args=i[3]))}}
     {{pass}}
-</table>
+    {{ if not flag:}}
+    {{=A('Unlike',callback=URL('unlikeimage',args=i[3]))}}
+    {{pass}}
+
+    <div class="likeCollum">
+        {{=len(like)}} people like this
+    </div>
+
+        {{data=[]}}
+        {{count=0}}
+        {{for comments in db(db.postcomment.post_id == i[3]).select(orderby=~db.postcomment.id):}}
+        {{persondetail = db(db.auth_user.id == comments.person_id).select()[0]}}
+        {{count=count+1}}
+    <div class="commentCollum">
+            <div class= "blah">
+                {{row=db(db.profilepic.person_id==persondetail.id).select()}}
+                {{ if len(row) == 0:}}
+                {{ =IMG(_height='30px',_width='30px',_src=URL("static/images","facebook-default-no-profile-pic.jpg") ) }}
+                {{pass}}
+                {{ if len(row) ==1:}}
+                {{=IMG(_height="30px", _width="30px",_src=URL('download',args=row[0].image  ) )   }}
+
+                {{pass}}
+
+            </div>
+            <div class= "blah1">
+                <small>{{=A(persondetail.first_name+persondetail.last_name , _href=URL("home/"+str(persondetail.id))) }}       {{=comments.comments}}</small>
+            </div>
+    </div>
+        {{pass}}
+
+
+
+    </div>
+{{pass}}
+{{pass}}
+{{pass}}

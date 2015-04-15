@@ -34,9 +34,9 @@ def sendreq():
     id1 = request.args[0]
     id2 = request.args[1]
 
-    flag=db( ( db.freq.friend_id1==id1 and db.freq.friend_id2==id2) or ( db.freq.friend_id1==id2 and db.freq.friend_id2==id1)  ).count()
+    flag=db( ( (db.freq.friend_id1==id1) & (db.freq.friend_id2==id2)) | ( (db.freq.friend_id1==id2) & (db.freq.friend_id2==id1))  ).count()
     if flag==0:
-        db(db.freq.friend_id1==id1 and db.freq.friend_id2==id2).delete()
+        db((db.freq.friend_id1==id1) & (db.freq.friend_id2==id2)).delete()
         db.freq.insert(friend_id1=id1,friend_id2=id2)
     redirect( request.env.http_web2py_component_location,client_side=True)
 
@@ -44,8 +44,8 @@ def sendreq():
 def delfriend():
     id1 = request.args[0]
     id2 = request.args[1]
-    db(db.friend.friend_id1==id1 and db.friend.friend_id2==id2).delete()
-    db(db.friend.friend_id1==id2 and db.friend.friend_id2==id1).delete()
+    db((db.friend.friend_id1==id1) & (db.friend.friend_id2==id2)).delete()
+    db((db.friend.friend_id1==id2) & (db.friend.friend_id2==id1)).delete()
     redirect( request.env.http_web2py_component_location,client_side=True)
 
 @auth.requires_login()
@@ -131,6 +131,13 @@ def home():
                 post.append((pid,des,img,postid,mus))
         else:
             post.append((pid,des,img,postid,mus))
+    like = []
+
+    for likes in db(db.postlikes.post_id == postid).select():
+        persondetail = db(db.auth_user.id == likes.person_id).select()[0]
+        like.append(persondetail)
+
+
 
     search = SQLFORM.factory(Field('Search','string'))
     if search.process(formname='search').accepted:
@@ -151,7 +158,7 @@ def home():
 
         db.profilepic.insert(person_id=logid, image=stream2)
     
-    return dict(picform=picform,search=search,logid=logid,people=people,flass=flass,l=l,m=m,data=A(auth.user.first_name, _href="default/home" ), name=k , flist=flist , frlist=frlist,form = form, post=post)
+    return dict(like=like,picform=picform,search=search,logid=logid,people=people,flass=flass,l=l,m=m,data=A(auth.user.first_name, _href="default/home" ), name=k , flist=flist , frlist=frlist,form = form, post=post)
 
 @auth.requires_login()
 def post():
