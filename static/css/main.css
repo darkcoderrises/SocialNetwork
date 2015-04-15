@@ -1,11 +1,26 @@
-div.postHome
+div.postHome,div.upload
 {
+    background-color:white;
     display:block;
-    border:1px solid black;
     margin:4px;
     margin-top:10px;
+    border-radius:5px;
     margin-bottom:8px;
     padding:1em;
+    box-shadow: 0px 0px 1px #C5C8D3;
+}
+a.postText
+{
+    color:black;
+    text-decoration:none;
+}
+td.a
+{
+    width:60px;
+}
+body
+{
+    background-color:#e9eaed;
 }
 div.likeCollum
 {
@@ -15,7 +30,9 @@ div.likeCollum
 }
 div.commentCollum
 {
+    padding:2px;
     padding-left:3px;
+    background-color:#E9EAED;
     display:block;
     margin-bottom:5px;
 }

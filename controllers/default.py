@@ -139,7 +139,8 @@ def home():
 
 
 
-    search = SQLFORM.factory(Field('Search','string'))
+    search = SQLFORM.factory(Field('Search','string',widget = lambda field, value:
+            SQLFORM.widgets.string.widget(field, value, _class='my-string')) , _class="hi")
     if search.process(formname='search').accepted:
         name = search.vars.Search
         resultn=[]

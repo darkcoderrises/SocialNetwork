@@ -38,7 +38,7 @@ Friends:
 {{=name}}
 {{if m==1:}}
 <br /><br />
-<div class='upload' style='border:1px solid black;'>
+<div class='upload' >
     Whats in your mind
     {{=form}}
 </div>
@@ -46,8 +46,7 @@ Friends:
 
 {{if m!=1 and flass==-1:}}
 <br /><br />
-{{ temp = ;
-<div class='upload' style='border:1px solid black;'>
+<div class='upload' >
     {{=A('Send Friend Request',callback=URL('sendreq',args=(l,logid) ))}}
 </div>
 {{pass}}
@@ -55,13 +54,13 @@ Friends:
 
 {{if m!=1 and flass==0:}}
 <br /><br />
-<div style='border:1px solid black;'>
+<div >
     {{=A('Accept Friend Request',callback=URL('acceptreq',args=(l,logid) ))}}
 </div>
 {{pass}}
 
 {{if m!=1 and flass==1:}}
-<div style='border:1px solid black;'>
+<div >
     {{=A('Delete Friend',callback=URL('delfriend',args=(l,logid) ))}}
 </div>
 {{pass}}
@@ -71,9 +70,9 @@ Friends:
 {{for i in post:}}
 {{if m==1 or ( m==-1 and l==i[0]  ) :}}
 <div class="postHome">
-    <table>
+    <table class="postTable">
         <tr>
-            <td >
+            <td class="a">
                 {{row=db(db.profilepic.person_id==i[0]).select()}}
                 {{ if len(row) == 0:}}
                 {{ =IMG(_height='50px',_width='50px',_src=URL("static/images","facebook-default-no-profile-pic.jpg") ) }}
@@ -83,17 +82,17 @@ Friends:
 
                 {{pass}}
             </td>
-            <td>
+            <td >
                 {{=A(people[i[0]], _href="/SocialNetwork/default/home/"+str(i[0]))}}
             </td>
         </tr>
         <tr>
             <td colspan='2'>
                 <br />
-                <a href="{{="../post/"+str(i[3])}}">
+                <a href="{{="../post/"+str(i[3])}}" class="postText">
                     {{=i[1]}}<br>
                     {{if i[2]!=None:}}
-                    {{=IMG(_height="100px", _width="100px",_src=URL('download',args=i[2]) )   }}
+                    {{=IMG(_height="400px", _width="400px",_src=URL('download',args=i[2]) )   }}
                     {{pass}}
                     {{if i[4]!=None:}}
                     {{ if i[4][-3:]=='mp3':  }}
@@ -135,7 +134,7 @@ Friends:
     <div class="likeCollum">
         {{=len(like)}} people like this
     </div>
-
+    <div class="biggerComment">
         {{data=[]}}
         {{count=0}}
         {{for comments in db(db.postcomment.post_id == i[3]).select(orderby=~db.postcomment.id):}}
@@ -158,7 +157,7 @@ Friends:
             </div>
     </div>
         {{pass}}
-
+    </div>
 
 
     </div>
