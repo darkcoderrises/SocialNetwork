@@ -22,7 +22,7 @@
                         {{pass}}
 
                         {{pass}}
-                        {{ if post[0] == auth.user.id:}} 
+                        {{ if post[0] == auth.user.id and post[0]!=5:}} 
                         {{=A('deletepost',callback=URL('deletepost',args=post[3]))  }}
                         {{pass}}
 

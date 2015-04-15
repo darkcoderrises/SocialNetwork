@@ -110,7 +110,7 @@ Friends:
     {{pass}}
     {{if m==-1:}}
     {{if l==i[0]:}}
-    <tr>
+    <tr style="border:2px solid black;">
         <td>
             {{row=db(db.profilepic.person_id==i[0]).select()}}
             {{ if len(row) == 0:}}
