@@ -157,7 +157,6 @@ def home():
     if picform.process(formname='picform').accepted:
         db(db.profilepic.person_id==logid).delete()
         stream2 = open(request.folder+'uploads/'+picform.vars.ProfilePic, 'rb')
-
         db.profilepic.insert(person_id=logid, image=stream2)
     
     return dict(like=like,picform=picform,search=search,logid=logid,people=people,flass=flass,l=l,m=m,data=A(auth.user.first_name, _href="default/home" ), name=k , flist=flist , frlist=frlist,form = form, post=post)
@@ -215,6 +214,7 @@ def search():
 
 @auth.requires_login()
 def likeimage():
+    db((db.postlikes.post_id==request.args[0])&(db.postlikes.person_id==auth.user.id)).delete()
     db.postlikes.insert(post_id=request.args[0], person_id=auth.user.id)
     redirect( request.env.http_web2py_component_location,client_side=True)
 
