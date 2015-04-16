@@ -24,14 +24,19 @@ body
 }
 div.likeCollum
 {
-    border-top:1px solid black;
     margin-top:5px;
     margin-bottom:10px;
 }
+div.friends
+{
+    border-radius:2px;
+    background-color:white;
+}
 div.commentCollum
 {
-    padding:2px;
-    padding-left:3px;
+    padding:4px;
+    border-radius:2px;
+    padding-left:5px;
     background-color:#E9EAED;
     display:block;
     margin-bottom:5px;
@@ -49,7 +54,22 @@ div.blah1
     height:50px;
     display:inline;
 }
-img,audio,video
+img
 {
     box-shadow: 0px 0px 6px #888888;
+}
+div.likeButton
+{
+    padding-left:4px;
+}
+audio,video
+{
+    box-shadow: 0px 0px 5px #888888;
+}
+p.likeBar
+{
+    border-radius:3px;
+    border:1px solid #eee;
+    padding:3px;
+    padding-left:7px;
 }

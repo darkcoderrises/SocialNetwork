@@ -23,13 +23,12 @@ Friends Requests:<br>
 {{pass}}
 
 {{=picform}}
-
-
-Friends:
-<br>
-{{for i in frlist:}}
-<a href="{{=i}}">{{=people[i]}}</a><br>
-{{pass}}
+<br />
+<div class="friends">
+    {{for i in frlist:}}
+    <p><a href="{{=i}}">{{=people[i]}}</a></p>
+    {{pass}}
+</div>
 {{end}}
 
 {{=search}}
@@ -83,14 +82,14 @@ Friends:
                 {{pass}}
             </td>
             <td >
-                {{=A(people[i[0]], _href="/SocialNetwork/default/home/"+str(i[0]))}}
+                <strong>{{=A(people[i[0]], _href="/SocialNetwork/default/home/"+str(i[0]))}}</strong>
             </td>
         </tr>
         <tr>
             <td colspan='2'>
                 <br />
                 <a href="{{="../post/"+str(i[3])}}" class="postText">
-                    {{=i[1]}}<br>
+                    <p class="text-justify">{{=i[1]}}</p>
                     {{if i[2]!=None:}}
                     {{=IMG(_height="400px", _width="400px",_src=URL('download',args=i[2]) )   }}
                     {{pass}}
@@ -117,7 +116,7 @@ Friends:
     {{ for likes in db(db.postlikes.post_id == i[3]).select():}}
     {{ like.append(db(db.auth_user.id==likes.person_id).select()[0])}}
     {{pass}}
-
+    <div class="likeButton">
     {{flag=1}}
     {{for postLikes in like:}}
     {{ if postLikes.id == auth.user.id :}}
@@ -130,17 +129,19 @@ Friends:
     {{ if not flag:}}
     {{=A('Unlike',callback=URL('unlikeimage',args=i[3]))}}
     {{pass}}
-
-    <div class="likeCollum">
-        {{=len(like)}} people like this
     </div>
+    {{ if len(like)!=0:}}
+    <div class="likeCollum">
+        <p class="likeBar">{{=len(like)}} people like this</p>
+    </div>
+    {{pass}}
     <div class="biggerComment">
         {{data=[]}}
         {{count=0}}
         {{for comments in db(db.postcomment.post_id == i[3]).select(orderby=~db.postcomment.id):}}
         {{persondetail = db(db.auth_user.id == comments.person_id).select()[0]}}
         {{count=count+1}}
-    <div class="commentCollum">
+        <div class="commentCollum">
             <div class= "blah">
                 {{row=db(db.profilepic.person_id==persondetail.id).select()}}
                 {{ if len(row) == 0:}}
@@ -153,14 +154,12 @@ Friends:
 
             </div>
             <div class= "blah1">
-                <small>{{=A(persondetail.first_name+persondetail.last_name , _href=URL("home/"+str(persondetail.id))) }}       {{=comments.comments}}</small>
+                <small><strong>{{=A(persondetail.first_name+persondetail.last_name , _href=URL("home/"+str(persondetail.id))) }}    </strong>   {{=comments.comments}}</small>
             </div>
-    </div>
+        </div>
         {{pass}}
     </div>
-
-
-    </div>
+</div>
 {{pass}}
 {{pass}}
 {{pass}}

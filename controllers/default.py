@@ -64,6 +64,7 @@ def home():
         name = request.args[0]
         for row in db().select(db.auth_user.ALL):
             people[int(row.id)]=row.first_name+" "+row.last_name
+
             if int(row.id) == int(name):
                 l= row.id
                 k = row.first_name
